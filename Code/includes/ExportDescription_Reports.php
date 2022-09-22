@@ -3,7 +3,7 @@
 	{
 		session_start();
 		include("Config.php");
-		ini_set("display_errors","0");
+		//ini_set("display_errors","0");
 		$_POST['Search'] = $_GET['Search'];
 		$_POST['group_id'] = $_GET['group_id'];
 		$_POST['fromdate'] = $_GET['fromdate'];
@@ -20,7 +20,7 @@
 		echo "<br/><table class='paginate sortable full'>";
 		$column = $options = $lists = $answer =array();
 		
-		$Numberofrows = mysql_num_rows(mysql_query("SELECT questions.name,feedbacks_comments.question_id,feedbacks_comments.comments,feedbacks_".$_POST['group_id'].".survey_id from feedbacks_comments JOIN feedbacks_".$_POST['group_id']." on feedbacks_".$_POST['group_id'].".id = feedbacks_comments.feedback_id 
+		$Numberofrows = mysqli_num_rows(mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT questions.name,feedbacks_comments.question_id,feedbacks_comments.comments,feedbacks_".$_POST['group_id'].".survey_id from feedbacks_comments JOIN feedbacks_".$_POST['group_id']." on feedbacks_".$_POST['group_id'].".id = feedbacks_comments.feedback_id 
 								join questions on questions.id = feedbacks_comments.question_id where questions.ownerEl='0' && questions.option_ids = ''
 								"));
 		echo "<tr>";
@@ -28,10 +28,10 @@
 		{
 			echo "<td align='center'><font style='color:red'>No Data Found</style></td>";
 		}	
-		$Comments = mysql_query("SELECT questions.name,feedbacks_comments.question_id,feedbacks_comments.comments,feedbacks_".$_POST['group_id'].".survey_id from feedbacks_comments JOIN feedbacks_".$_POST['group_id']." on feedbacks_".$_POST['group_id'].".id = feedbacks_comments.feedback_id 
+		$Comments = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT questions.name,feedbacks_comments.question_id,feedbacks_comments.comments,feedbacks_".$_POST['group_id'].".survey_id from feedbacks_comments JOIN feedbacks_".$_POST['group_id']." on feedbacks_".$_POST['group_id'].".id = feedbacks_comments.feedback_id 
 								join questions on questions.id = feedbacks_comments.question_id where questions.ownerEl='0' && questions.option_ids = ''
 								");
-		while($commentsdetails = mysql_fetch_array($Comments))
+		while($commentsdetails = mysqli_fetch_array($Comments))
 		{
 			echo "<tr>
 			<td><font style='color:red'>".$commentsdetails['survey_id']."</style></td>

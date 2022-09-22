@@ -62,9 +62,9 @@
 	->setCellValue('J6', 'Last Ping')->getStyle('A6:J6')->applyFromArray($TableHeaderStyle);
 	$i=0;
 	//$Devices = Select_Devices_By_DeviceIds();
-	SetHeader($Sheet, $_SESSION['Filter']['Module']." Report ".date("d-M-Y"), "Total ".$_SESSION['Filter']['Module']." Logs : ".mysql_num_rows($Devices));
+	SetHeader($Sheet, $_SESSION['Filter']['Module']." Report ".date("d-M-Y"), "Total ".$_SESSION['Filter']['Module']." Logs : ".mysqli_num_rows($Devices));
 	
-	while($Device = mysql_fetch_array($Devices))
+	while($Device = mysqli_fetch_array($Devices))
 	{
 		$objPHPExcel->setActiveSheetIndex($Sheet)
 		->setCellValue('A'.(6+(++$i)), $i)

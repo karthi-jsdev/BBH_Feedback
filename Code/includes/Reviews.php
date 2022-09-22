@@ -13,7 +13,7 @@
 					<option value="">Select</option>
 					<?php
 					$Groups = Select_Groups();
-					while($Group = mysql_fetch_array($Groups))
+					while($Group = mysqli_fetch_array($Groups))
 					{
 						if($Group['id'] == $_GET['group_id'])
 							echo '<option value="'.$Group['id'].'" selected>'.$Group['name'].'</option>';
@@ -26,9 +26,9 @@
 <?php
 	if($_GET['status'] || $_GET['group_id'])
 	{
-		$Rtotal = mysql_Fetch_assoc(Patient_FeedbackReviewedCount());
-		$NRtotal = mysql_Fetch_assoc(Patient_FeedbackNotReviewedCount());
-		$total = mysql_Fetch_assoc(Patient_FeedbackCount());
+		$Rtotal = mysqli_Fetch_assoc(Patient_FeedbackReviewedCount());
+		$NRtotal = mysqli_Fetch_assoc(Patient_FeedbackNotReviewedCount());
+		$total = mysqli_Fetch_assoc(Patient_FeedbackCount());
 		if($total['total']==0)
 			{}
 		else
@@ -55,13 +55,13 @@
 				<a href="index.php?page='.$_GET['page'].'&group_id='.$_GET['group_id'].'&status=NotReviewed" >Not Reviewed('.$NRtotal['total'].')</a>';
 		}
 		if($_GET['status']=='All')
-			$total = mysql_Fetch_assoc(Patient_FeedbackCount());
+			$total = mysqli_Fetch_assoc(Patient_FeedbackCount());
 		else if($_GET['status']=='Reviewed')
-			$total = mysql_Fetch_assoc(Patient_FeedbackReviewedCount());
+			$total = mysqli_Fetch_assoc(Patient_FeedbackReviewedCount());
 		else if($_GET['status']=='NotReviewed')
-			$total = mysql_Fetch_assoc(Patient_FeedbackNotReviewedCount());
+			$total = mysqli_Fetch_assoc(Patient_FeedbackNotReviewedCount());
 		else
-			$total = mysql_Fetch_assoc(Patient_FeedbackCount());
+			$total = mysqli_Fetch_assoc(Patient_FeedbackCount());
 		echo'<table class="paginate sortable full">
 			<tr>
 				<th>Slno</th>
@@ -93,9 +93,9 @@
 				$feedback = Patient_FeedbackNotReviewed($Start,$Limit);
 			else
 				$feedback = Patient_Feedbacklist($Start,$Limit);
-			while($feedbackist = mysql_fetch_Assoc($feedback))
+			while($feedbackist = mysqli_fetch_Assoc($feedback))
 			{
-				$status = mysql_Fetch_Assoc(mysql_query("SELECT ticket_no,review_msg,ticket_msg,date_time,feedback_reviews.review,ticket_id from feedback_reviews where patient_id='".$feedbackist['pid']."' && groups_id='".$_GET['group_id']."' && feedbackid='".$feedbackist['id']."'"));
+				$status = mysqli_Fetch_Assoc(mysqli_query("SELECT ticket_no,review_msg,ticket_msg,date_time,feedback_reviews.review,ticket_id from feedback_reviews where patient_id='".$feedbackist['pid']."' && groups_id='".$_GET['group_id']."' && feedbackid='".$feedbackist['id']."'"));
 				echo'<tr>
 						<td>'.$i++.'</td>
 						<td>'.$feedbackist['survey_id'].'</td>

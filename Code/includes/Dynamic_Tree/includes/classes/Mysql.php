@@ -19,20 +19,20 @@
 		//connect to database
 		private function connect()
 		{	
-			$this->dbLink = mysql_connect($this->dbHost, $this->dbUsername, $this->dbPassword);		
+			$this->dbLink = mysqli_connect($this->dbHost, $this->dbUsername, $this->dbPassword);		
 			if(!$this->dbLink)
 			{			
 				$this->ShowError();
 				return false;
 			}
-			else if (!mysql_select_db($this->dbName,$this->dbLink))
+			else if (!mysqli_select_db($this->dbName,$this->dbLink))
 			{
 				$this->ShowError();
 				return false;
 			}
 			else
 			{
-				mysql_query("set names utf8",$this->dbLink);
+				mysqli_query("set names utf8",$this->dbLink);
 				return true;
 			}
 			unset ($this->dbHost, $this->dbUsername, $this->dbPassword, $this->dbName);		
@@ -42,12 +42,12 @@
 		 *****************************/
 		function close()
 		{
-			mysql_close($this->dbLink);
+			mysqli_close($this->dbLink);
 		}
 		// Checks for MySQL Errors
 		function ShowError()
 		{
-			$error = mysql_error();
+			$error = mysqli_error();
 			//echo $error;		
 		}	
 		// Method to run SQL queries
@@ -56,7 +56,7 @@
 			if(!$this->dbLink)	
 				$this->connect();
 				
-			if(! $result = mysql_query($sql,$this->dbLink))
+			if(! $result = mysqli_query($sql,$this->dbLink))
 			{
 				$this->ShowError();			
 				return false;
@@ -67,7 +67,7 @@
 		// Method to fetch values
 		function fetchObject($result)
 		{
-			if(!$Object=mysql_fetch_object($result))
+			if(!$Object=mysqli_fetch_object($result))
 			{
 				$this->ShowError();
 				return false;
@@ -78,7 +78,7 @@
 		// Method to number of rows
 		function numRows($result)
 		{
-			if(false === ($num = mysql_num_rows($result)))
+			if(false === ($num = mysqli_num_rows($result)))
 			{
 				$this->ShowError();
 				return -1;
@@ -92,14 +92,14 @@
 				return $string;
 			else 
 			{
-				$string = mysql_escape_string($string);
+				$string = mysqli_escape_string($string);
 				return $string;
 			}
 		}
 		
 		function free($result)
 		{
-			if (mysql_free_result($result))
+			if (mysqli_free_result($result))
 			{
 				$this->ShowError();
 				return false;
@@ -109,12 +109,12 @@
 		
 		function lastInsertId()
 		{
-			return mysql_insert_id($this->dbLink);
+			return mysqli_insert_id($this->dbLink);
 		}
 		
 		function getUniqueField($sql)
 		{
-			$row = mysql_fetch_row($this->query($sql));
+			$row = mysqli_fetch_row($this->query($sql));
 			return $row[0];
 		}
 	}

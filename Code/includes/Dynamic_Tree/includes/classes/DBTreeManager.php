@@ -18,12 +18,12 @@
 			if($this->db->query($sql) == true)
 			{
 				$out = '({ "elementId":"'.$this->db->lastInsertId().'", "elementName":"'.$name.'", "slave":"'.$slave.'"})';
-				mysql_query("ALTER TABLE feedbacks_".$_SESSION['group_id']." ADD COLUMN `".$this->db->lastInsertId()."` int(11) NOT NULL");
+				mysqli_query("ALTER TABLE feedbacks_".$_SESSION['group_id']." ADD COLUMN `".$this->db->lastInsertId()."` int(11) NOT NULL");
 			}
 			$this->db->query('UPDATE dynamic SET `update`='.rand());
 			
-			$Last_Row = mysql_fetch_array(mysql_query("SELECT Id FROM questions ORDER BY Id DESC LIMIT 1"));
-			mysql_query("UPDATE questions SET module='".str_replace(" ", "_", $name)."' WHERE Id=".$Last_Row['Id']);
+			$Last_Row = mysqli_fetch_array(mysqli_query("SELECT Id FROM questions ORDER BY Id DESC LIMIT 1"));
+			mysqli_query("UPDATE questions SET module='".str_replace(" ", "_", $name)."' WHERE Id=".$Last_Row['Id']);
 			
 			return $out;	
 		}
@@ -72,7 +72,7 @@
 			if($this->db->query($sql) == true)
 				$out = '({"elementName":"'.$name.'", "elementId":"'.$elementId.'"})';
 			$this->db->query('UPDATE dynamic SET `update`='.rand());
-			mysql_query("UPDATE questions SET module='".str_replace(" ", "_", $name)."' WHERE Id=".$elementId);
+			mysqli_query("UPDATE questions SET module='".str_replace(" ", "_", $name)."' WHERE Id=".$elementId);
 			return $out;
 		}
 

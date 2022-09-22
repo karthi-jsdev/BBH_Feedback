@@ -6,8 +6,8 @@
 			<select onChange="window.document.location.href='<?php echo 'index.php?page='.$_GET['page'].'&subpage='.$_GET['subpage'].'&group_id='; ?>'+this.options[this.selectedIndex].value;">
 				<option value="">Select</option>
 				<?php
-				$Groups = mysql_query("SELECT * FROM groups WHERE status=1 ORDER BY id");
-				while($Group = mysql_fetch_array($Groups))
+				$Groups = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT * FROM groups WHERE status=1 ORDER BY id");
+				while($Group = mysqli_fetch_array($Groups))
 				{
 					if($Group['id'] == $_GET['group_id'])
 					{
@@ -25,7 +25,9 @@
 	
 	<?php
 	if($_GET['group_id'])
-	{ ?>
+	{ 
+		echo $_GET['group_id'];
+		?>
 		<section role="main" id="main">
 			<div class="columns" style='width:982px;height:700px;'>
 				<form class="form panel" role="form" id="<?php echo $_GET['subpage'];?>_Form" style="height:500px;">

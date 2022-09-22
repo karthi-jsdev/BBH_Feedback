@@ -24,10 +24,10 @@
 			$lists =array();
 			$answer =array();
 			$i=1;
-			$Columns = mysql_Query("SELECT distinct(column_name) as column_name FROM information_schema.columns WHERE table_name='feedbacks_$_POST[group_id]'");
-			while($Columnname = mysql_fetch_Assoc($Columns))
+			$Columns = mysqli_Query("SELECT distinct(column_name) as column_name FROM information_schema.columns WHERE table_name='feedbacks_$_POST[group_id]'");
+			while($Columnname = mysqli_fetch_Assoc($Columns))
 			{
-				$Qlist = mysql_Fetch_Assoc(mysql_query("SELECT option_ids,name,Id FROM questions WHERE questions.id='".$Columnname['column_name']."' && ownerEl='0'"));
+				$Qlist = mysqli_Fetch_Assoc(mysqli_query("SELECT option_ids,name,Id FROM questions WHERE questions.id='".$Columnname['column_name']."' && ownerEl='0'"));
 				echo '<tr>
 						<td colspan="7" style="font-size:12px;font-weight:bold;">'.$Qlist['name'].'</td>
 					</tr><tr><td></td>';
@@ -41,7 +41,7 @@
 					{}
 					else
 					{
-						$Alist = mysql_fetch_assoc(mysql_query("SELECT answer,id FROM answers WHERE id='".$optionid."'"));
+						$Alist = mysqli_fetch_assoc(mysqli_query("SELECT answer,id FROM answers WHERE id='".$optionid."'"));
 						$answer[$Alist['id']] = 0;
 						if($_POST['displaydata'] =="Percent")
 						{
@@ -60,13 +60,13 @@
 				else
 				{
 					$AllOptionValues = array();
-					$SQlist = mysql_query("SELECT name,Id FROM questions WHERE ownerEl='".$Qlist['Id']."'");
-					while($Sqlists = mysql_Fetch_Assoc($SQlist))
+					$SQlist = mysqli_query("SELECT name,Id FROM questions WHERE ownerEl='".$Qlist['Id']."'");
+					while($Sqlists = mysqli_Fetch_Assoc($SQlist))
 					{
 						echo '<tr><td>'.$Sqlists['name'].'</td>';						
-						$list_count = mysql_query("SELECT count(feedbacks_$_POST[group_id].".$Sqlists['Id'].") as total, feedbacks_$_POST[group_id].".$Sqlists['Id']." FROM questions join feedbacks_$_POST[group_id] on questions.id=feedbacks_$_POST[group_id].".$Sqlists['Id']." WHERE date_time between '".$_POST['fromdate']."' and '".$_POST['todate']."' group by questions.id");
-						$patient_count = mysql_Fetch_Assoc(mysql_query("SELECT count(feedbacks_$_POST[group_id].patient_id) as patientcount FROM questions join feedbacks_$_POST[group_id] on questions.id=feedbacks_$_POST[group_id].".$Sqlists['Id']." WHERE date_time between '".$_POST['fromdate']."' and '".$_POST['todate']."'"));
-						while($ACount = mysql_Fetch_Assoc($list_count))
+						$list_count = mysqli_query("SELECT count(feedbacks_$_POST[group_id].".$Sqlists['Id'].") as total, feedbacks_$_POST[group_id].".$Sqlists['Id']." FROM questions join feedbacks_$_POST[group_id] on questions.id=feedbacks_$_POST[group_id].".$Sqlists['Id']." WHERE date_time between '".$_POST['fromdate']."' and '".$_POST['todate']."' group by questions.id");
+						$patient_count = mysqli_Fetch_Assoc(mysqli_query("SELECT count(feedbacks_$_POST[group_id].patient_id) as patientcount FROM questions join feedbacks_$_POST[group_id] on questions.id=feedbacks_$_POST[group_id].".$Sqlists['Id']." WHERE date_time between '".$_POST['fromdate']."' and '".$_POST['todate']."'"));
+						while($ACount = mysqli_Fetch_Assoc($list_count))
 						{
 							if($_POST['displaydata'] == "Count")
 								$answer[$ACount[$Sqlists['Id']]] = $ACount['total'];

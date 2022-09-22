@@ -36,7 +36,7 @@
 							<option value="">Select</option>
 							<?php
 							$Groups = Select_Groups();
-							while($Group = mysql_fetch_array($Groups))
+							while($Group = mysqli_fetch_array($Groups))
 							{
 								if($Group['id'] == $_GET['group_id'] || $_POST['group_id'] == $Group['id'])
 									echo '<option value="'.$Group['id'].'" selected>'.$Group['name'].'</option>';
@@ -69,13 +69,13 @@
 					<th align='left'>Feedback Count</th>
 				</thead>
 				<?php
-						$countfeedbacknumbers = mysql_query("SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc");
-						$feedbacknumbers = mysql_query("SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc");
-						$Countfeedbacks = mysql_fetch_array($countfeedbacknumbers);
+						$countfeedbacknumbers = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc");
+						$feedbacknumbers = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc");
+						$Countfeedbacks = mysqli_fetch_array($countfeedbacknumbers);
 						if($Countfeedbacks['datavalue'] == 0)
 							echo "<tr><td colspan='3' align='center' style='color:red'>No Data Found</td></tr>" ;
 						$i=1;
-						while($Numberoffeedback = mysql_fetch_array($feedbacknumbers))
+						while($Numberoffeedback = mysqli_fetch_array($feedbacknumbers))
 						{
 							echo "<tr><td>".$i++."</td>
 							<td>".date("F", mktime(0, 0, 0, $Numberoffeedback['monthvalue'], 01))."</td>
@@ -86,8 +86,8 @@
 			<br />
 			<?php 
 			$monthname = $feedbackcountvalues = array();
-			$feedbacknumbers = mysql_query("SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` asc"); 
-				while($Numberoffeedback = mysql_fetch_array($feedbacknumbers))
+			$feedbacknumbers = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` asc"); 
+				while($Numberoffeedback = mysqli_fetch_array($feedbacknumbers))
 				{				
 					$monthname[] = date("F", mktime(0, 0, 0, $Numberoffeedback['monthvalue'], 01));
 					$feedbackcountvalues[] = $Numberoffeedback['datavalue'];
@@ -169,8 +169,8 @@
 							name: 'feedbackcount',
 							data: [
 							<?php 
-								$feedbacknumbers = mysql_query("SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc"); 
-								while($Numberoffeedback = mysql_fetch_array($feedbacknumbers))
+								$feedbacknumbers = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT extract(MONTH from `date_time`)as monthvalue,count(extract(MONTH from `date_time`)) as datavalue  FROM feedbacks_$_POST[group_id] where extract(year from '".date('y-m-d',strtotime($_POST['year']))."') = extract(YEAR from `date_time`) group by extract(MONTH from `date_time`) order by `date_time` desc"); 
+								while($Numberoffeedback = mysqli_fetch_array($feedbacknumbers))
 								{ ?>
 									['<?php echo date("F", mktime(0, 0, 0, $Numberoffeedback['monthvalue'], 01));?>',   <?php echo $Numberoffeedback['datavalue'];?>],
 						<?php 	}

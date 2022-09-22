@@ -10,7 +10,7 @@
 				<div class="clearfix">
 						<?php 	
 					$info = Patient_Info_Summary();
-					$patientinfo = mysql_fetch_assoc($info);
+					$patientinfo = mysqli_fetch_assoc($info);
 					echo "<span style='color:red;font-size:14px;'><center><strong>Patient Details</strong></center></span>
 						<table class='paginate sortable full'>
 							<tr>
@@ -35,29 +35,29 @@
 							</tr>
 						</table><br/>";
 					$Answers = Array();
-					$AnswerQuery = mysql_query("SELECT * FROM answers");
-					while($Answer = mysql_fetch_array($AnswerQuery))
+					$AnswerQuery = mysqli_query("SELECT * FROM answers");
+					while($Answer = mysqli_fetch_array($AnswerQuery))
 						$Answers[$Answer['id']] = $Answer['answer'];
 					$Questions = Array();
-					$QuestionsQuery = mysql_query("SELECT Id, name,ownerEl FROM questions WHERE group_id=$_GET[group_id] and status='1' ORDER BY Id");
-					while($Question = mysql_fetch_array($QuestionsQuery))
+					$QuestionsQuery = mysqli_query("SELECT Id, name,ownerEl FROM questions WHERE group_id=$_GET[group_id] and status='1' ORDER BY Id");
+					while($Question = mysqli_fetch_array($QuestionsQuery))
 					{
 						$Questions['id'][] = $Question['Id'];
 						$Questions['question'][] = $Question['name'];
 						$Questions['ownerEl'][] = $Question['ownerEl'];
 					}
-					$FeedbacksQuery = mysql_query("SELECT * FROM feedbacks_$_GET[group_id] WHERE feedbacks_$_GET[group_id].patient_id=$_GET[patient_id] ORDER BY feedbacks_$_GET[group_id].id DESC LIMIT 1");
+					$FeedbacksQuery = mysqli_query("SELECT * FROM feedbacks_$_GET[group_id] WHERE feedbacks_$_GET[group_id].patient_id=$_GET[patient_id] ORDER BY feedbacks_$_GET[group_id].id DESC LIMIT 1");
 					echo "<span style='color:red;font-size:14px;'><center><strong>Patient FeedBack Details</strong></center></span>
 						<table class='paginate sortable full'>";
-					while($Feedback = mysql_fetch_array($FeedbacksQuery))
+					while($Feedback = mysqli_fetch_array($FeedbacksQuery))
 					{
 						$j=1;
 						for($i = 0; $i < COUNT($Questions['id']); $i++)
 						{
 							echo '<tr>';
-							//$option_id = mysql_fetch_array(mysql_query("SELECT option_ids,ownerEl FROM questions WHERE questions.id=".$Questions['id'][$i].""));
-							$Comments = mysql_fetch_array(mysql_query("SELECT comments FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." and feedbacks_comments.feedback_id = ".$Feedback['id']." "));
-							$Comment_total = mysql_fetch_array(mysql_query("SELECT count(*) as total FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." and feedbacks_comments.feedback_id = ".$Feedback['id']." "));
+							//$option_id = mysqli_fetch_array(mysqli_query("SELECT option_ids,ownerEl FROM questions WHERE questions.id=".$Questions['id'][$i].""));
+							$Comments = mysqli_fetch_array(mysqli_query("SELECT comments FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." and feedbacks_comments.feedback_id = ".$Feedback['id']." "));
+							$Comment_total = mysqli_fetch_array(mysqli_query("SELECT count(*) as total FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." and feedbacks_comments.feedback_id = ".$Feedback['id']." "));
 							if($Questions['ownerEl'][$i] == 0)
 							{
 								if($Comment_total['total']>=1)
@@ -83,24 +83,24 @@
 						}	
 						
 						/* $Answers = Array();
-							$AnswerQuery = mysql_query("SELECT * FROM answers");
-							while($Answer = mysql_fetch_array($AnswerQuery))
+							$AnswerQuery = mysqli_query("SELECT * FROM answers");
+							while($Answer = mysqli_fetch_array($AnswerQuery))
 								$Answers[$Answer['id']] = $Answer['answer'];
 							$Questions = Array();
-							$QuestionsQuery = mysql_query("SELECT Id, name,ownerEl FROM questions WHERE group_id=$_GET[group_id] and status='1' ORDER BY Id");
-							while($Question = mysql_fetch_array($QuestionsQuery))
+							$QuestionsQuery = mysqli_query("SELECT Id, name,ownerEl FROM questions WHERE group_id=$_GET[group_id] and status='1' ORDER BY Id");
+							while($Question = mysqli_fetch_array($QuestionsQuery))
 							{
 								$Questions['id'][] = $Question['Id'];
 								$Questions['question'][] = $Question['name'];
 								$Questions['ownerEl'][] = $Question['ownerEl'];
 							}
 							
-							$FeedbacksQuery = mysql_query("SELECT * FROM feedbacks_$_GET[group_id] WHERE feedbacks_$_GET[group_id].patient_id=$_GET[patient_id] ORDER BY feedbacks_$_GET[group_id].id DESC LIMIT 1");
-							while($Feedback = mysql_fetch_array($FeedbacksQuery))
+							$FeedbacksQuery = mysqli_query("SELECT * FROM feedbacks_$_GET[group_id] WHERE feedbacks_$_GET[group_id].patient_id=$_GET[patient_id] ORDER BY feedbacks_$_GET[group_id].id DESC LIMIT 1");
+							while($Feedback = mysqli_fetch_array($FeedbacksQuery))
 							{
 								for($i = 0; $i < COUNT($Questions['id']); $i++)
 								{
-									$Comments = mysql_fetch_array(mysql_query("SELECT comments FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." ORDER BY id DESC LIMIT 1"));
+									$Comments = mysqli_fetch_array(mysqli_query("SELECT comments FROM feedbacks_comments WHERE question_id=".$Questions['id'][$i]." ORDER BY id DESC LIMIT 1"));
 									if($Questions['ownerEl'][$i] == 0)
 										echo "<b>".$Questions['question'][$i]."</b> : ".$Answers[$Feedback[$Questions['id'][$i]]]."&nbsp;&nbsp;&nbsp;&nbsp;Comments : ".$Comments['comments']."<br />";
 									else	

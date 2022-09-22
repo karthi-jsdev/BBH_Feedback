@@ -33,6 +33,7 @@
 		$dbUsername = $_SESSION[$_SESSION['Prefix'].'ServerUser']; 
 		$dbPassword = $_SESSION[$_SESSION['Prefix'].'ServerPassword'];
 		$dbName = $_SESSION[$_SESSION['Prefix'].'ServerDB'];
+		
 		define ("TREE_TABLE_PREFIX", "");
 	}
 	else

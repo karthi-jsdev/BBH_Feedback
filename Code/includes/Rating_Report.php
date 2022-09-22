@@ -24,7 +24,7 @@
 							<option value="">Select</option>
 							<?php
 							$Groups = Select_Groups();
-							while($Group = mysql_fetch_array($Groups))
+							while($Group = mysqli_fetch_array($Groups))
 							{
 								if($Group['id'] == $_GET['group_id'] || $_POST['group_id'] == $Group['id'])
 									echo '<option value="'.$Group['id'].'" selected>'.$Group['name'].'</option>';
@@ -58,8 +58,8 @@
 			echo "<br/><table class='pagin sortable full'>";
 			
 			$AnswerIds = $Score = $Scorevalue = array();
-			$Answers = mysql_query("SELECT * FROM answers ORDER BY id");
-			while($Answer = mysql_fetch_array($Answers))
+			$Answers = mysqli_query("SELECT * FROM answers ORDER BY id");
+			while($Answer = mysqli_fetch_array($Answers))
 			{
 				$Score[$Answer['id']] = 0;
 				$AnswerIds["$Answer[id]Id"] = $Answer['id'];
@@ -67,11 +67,11 @@
 				$AnswerIds["$Answer[id]Rating"] = $Answer['rating'];
 			}
 			$Numberoftotal = array();
-			$SubQuestionId = mysql_query("SELECT * FROM questions where group_id=$_POST[group_id] and ownerEl!=0 ORDER BY Id");
-			while($subquestion = mysql_fetch_array($SubQuestionId))
+			$SubQuestionId = mysqli_query("SELECT * FROM questions where group_id=$_POST[group_id] and ownerEl!=0 ORDER BY Id");
+			while($subquestion = mysqli_fetch_array($SubQuestionId))
 			{
-				$Questions = mysql_query("SELECT SUM(`$subquestion[Id]`) as totalcount, `$subquestion[Id]`, COUNT(`$subquestion[Id]`) as total from feedbacks_$_POST[group_id] GROUP BY `$subquestion[Id]`");
-				while($Question = mysql_fetch_assoc($Questions))
+				$Questions = mysqli_query("SELECT SUM(`$subquestion[Id]`) as totalcount, `$subquestion[Id]`, COUNT(`$subquestion[Id]`) as total from feedbacks_$_POST[group_id] GROUP BY `$subquestion[Id]`");
+				while($Question = mysqli_fetch_assoc($Questions))
 				{
 					$Numberoftotal[$Question[$subquestion['Id']]] += $Question['total'];
 					$Score[$Question[$subquestion['Id']]] += ($Question['total']* $AnswerIds[$Question[$subquestion['Id']]."Rating"]);
@@ -83,7 +83,7 @@
 				
 					if($key!=1 && $key<=6)
 					{
-						$answeroptionname = mysql_fetch_array(mysql_query("select answer,rating from answers where id= '".$key."'"));
+						$answeroptionname = mysqli_fetch_array(mysqli_query("select answer,rating from answers where id= '".$key."'"));
 						$answername = $answeroptionname['answer'];
 						$Totalratingvalue += $value;
 						$Totalfeedbackvalue +=$Numberoftotal[$key];

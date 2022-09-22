@@ -6,7 +6,7 @@
 	$Columns = array("id", "answer", "status", "color","rating");
 	if($_GET['action'] == 'Edit')
 	{
-		$Answer = mysql_fetch_assoc(Answer_Select_ById());
+		$Answer = mysqli_fetch_assoc(Answer_Select_ById());
 		foreach($Columns as $Col)
 			$_POST[$Col] = $Answer[$Col];
 	}
@@ -21,7 +21,7 @@
 		$AnswerResource = Answer_Select_ByNamePWD();
 		if(isset($_POST['Submit']))
 		{
-			if(mysql_num_rows($AnswerResource))
+			if(mysqli_num_rows($AnswerResource))
 				$message = "<br /><div class='message error'><b>Message</b> : This Answer already exists</div>";
 			else
 			{
@@ -31,8 +31,8 @@
 		}
 		else if(isset($_POST['Update']))
 		{
-			$Answer = mysql_fetch_assoc($AnswerResource);
-			if(mysql_num_rows(Answer_Select_ByNamePWDId()))
+			$Answer = mysqli_fetch_assoc($AnswerResource);
+			if(mysqli_num_rows(Answer_Select_ByNamePWDId()))
 				$message = "<br /><div class='message error'><b>Message</b> : This Answer already exists</div>";
 			else
 			{
@@ -89,7 +89,7 @@
 	<div class="columns">
 		<h3>Answer List
 			<?php
-			$AnswerTotalRows = mysql_fetch_assoc(Answer_Select_Count_All());
+			$AnswerTotalRows = mysqli_fetch_assoc(Answer_Select_Count_All());
 			echo " : No. of total Answers - ".$AnswerTotalRows['total'];
 			?>
 		</h3>
@@ -122,7 +122,7 @@
 				$Answers = array("Disable", "Enable");
 				$Status = array("<a href='#' class='action-button' title='delete'><span class='delete'></span></a>", "<a href='#' class='action-button' title='accept'><span class='accept'></span></a>");
 				$AnswerRows = Answer_Select_ByLimit($Start, $Limit);
-				while($Answer = mysql_fetch_assoc($AnswerRows))
+				while($Answer = mysqli_fetch_assoc($AnswerRows))
 				{
 					echo "<tr>
 						<td align='center'>".$i--."</td>

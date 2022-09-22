@@ -4,15 +4,15 @@
 	
 	//Total Feedback
 	$monthname = $feedbackcountvalues = array();
-	$feedbacknumbers = mysql_query("SELECT date_time,COUNT(extract(day from `date_time`)) as countvalue  FROM feedbacks_1 where `date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from `date_time`)"); 
-	while($Numberoffeedback = mysql_fetch_array($feedbacknumbers))
+	$feedbacknumbers = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT date_time,COUNT(extract(day from `date_time`)) as countvalue  FROM feedbacks_1 where `date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from `date_time`)"); 
+	while($Numberoffeedback = mysqli_fetch_array($feedbacknumbers))
 	{				
 		$monthname[] = date('d-m-y',strtotime($Numberoffeedback['date_time']));
 		$feedbackcountvalues[] = $Numberoffeedback['countvalue'];
 	}
 	$monthname1 = $feedbackcountvalues1 = array();
-	$feedbacknumbers1 = mysql_query("SELECT date_time,COUNT(extract(day from `date_time`)) as countvalue  FROM feedbacks_2 where `date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from `date_time`)"); 
-	while($Numberoffeedback1 = mysql_fetch_array($feedbacknumbers1))
+	$feedbacknumbers1 = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT date_time,COUNT(extract(day from `date_time`)) as countvalue  FROM feedbacks_2 where `date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from `date_time`)"); 
+	while($Numberoffeedback1 = mysqli_fetch_array($feedbacknumbers1))
 	{				
 		$monthname1[] = date('d-m-y',strtotime($Numberoffeedback1['date_time']));
 		$feedbackcountvalues1[] = $Numberoffeedback1['countvalue'];
@@ -121,21 +121,21 @@
 <tr>
 <?php
 	//Reviewed
-	$Allfeedbacks = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
+	$Allfeedbacks = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
 	where patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");
 	$ReviewsTotal = $Reviewed = $NotReviewed = $Datename = array();
-	while($TotalAllfeedbacks = mysql_fetch_array($Allfeedbacks))
+	while($TotalAllfeedbacks = mysqli_fetch_array($Allfeedbacks))
 	{
 		$Datename[] = date('d-m-y',strtotime($TotalAllfeedbacks['date_time']));
 		$TotalAllfeedbacks['total'];
 		$ReviewsTotal[] =  $TotalAllfeedbacks['total'];
 	}
 	
-	$AllReviewedfeedbacks = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
+	$AllReviewedfeedbacks = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
 	JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_1.id
 	where feedback_reviews.groups_id = 1 and feedback_reviews.review = 1 and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");							
 	$i = 0;
-	while($Reviewedfeedbacks = mysql_fetch_array($AllReviewedfeedbacks))
+	while($Reviewedfeedbacks = mysqli_fetch_array($AllReviewedfeedbacks))
 	{
 		$Reviewedfeedbacks['date_time'];
 		$Reviewed[] = $Reviewedfeedbacks['total'];
@@ -144,21 +144,21 @@
 	} 
 	
 	
-	$Allfeedbacks1 = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
+	$Allfeedbacks1 = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
 	where patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");
 	$ReviewsTotal1 = $Reviewed1= $NotReviewed1 = $Datename1 = array();
-	while($TotalAllfeedbacks1 = mysql_fetch_array($Allfeedbacks1))
+	while($TotalAllfeedbacks1 = mysqli_fetch_array($Allfeedbacks1))
 	{
 		$Datename1[] = date('d-m-y',strtotime($TotalAllfeedbacks1['date_time']));
 		$TotalAllfeedbacks1['total'];
 		$ReviewsTotal1[] =  $TotalAllfeedbacks1['total'];
 	}
 	
-	$AllReviewedfeedbacks1 = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
+	$AllReviewedfeedbacks1 = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
 	JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_2.id
 	where feedback_reviews.groups_id = 2 and feedback_reviews.review = 1 and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");							
 	$i = 0;
-	while($Reviewedfeedbacks1 = mysql_fetch_array($AllReviewedfeedbacks1))
+	while($Reviewedfeedbacks1 = mysqli_fetch_array($AllReviewedfeedbacks1))
 	{
 		$Reviewedfeedbacks1['date_time'];
 		$Reviewed1[] = $Reviewedfeedbacks1['total'];
@@ -268,22 +268,22 @@
 <?php
 		//Reviewed and Raised
 		
-		$Allreviewed = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
+		$Allreviewed = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
 			JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_1.id
 			where feedback_reviews.review = 1 and feedback_reviews.groups_id = 1 and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");
 		$AllReviewsTotal = $RaisedReviewed = $NotRaisedReviewed = $RaisedDatename = array();
-		while($Totalreviewedfeedbacks = mysql_fetch_array($Allreviewed))
+		while($Totalreviewedfeedbacks = mysqli_fetch_array($Allreviewed))
 		{
 			$RaisedDatename[] = date('d-m-y',strtotime($Totalreviewedfeedbacks['date_time']));
 			$Totalreviewedfeedbacks['total'];
 			$AllReviewsTotal[] =  $Totalreviewedfeedbacks['total'];
 		}
 		
-		$AllRaisedreviewsfeedbacks = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
+		$AllRaisedreviewsfeedbacks = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_1 join patients on feedbacks_1.patient_id = patients.id 
 		JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_1.id
 		where feedback_reviews.groups_id = 1 and feedback_reviews.review = 1 and feedback_reviews.ticket_no != '' and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");							
 		$i = 0;
-		while($RaisedReviewedfeedbacks = mysql_fetch_array($AllRaisedreviewsfeedbacks))
+		while($RaisedReviewedfeedbacks = mysqli_fetch_array($AllRaisedreviewsfeedbacks))
 		{
 			$RaisedReviewedfeedbacks['date_time'];
 			$RaisedReviewed[] = $RaisedReviewedfeedbacks['total'];
@@ -292,22 +292,22 @@
 		}
 		
 		
-		$Allreviewed1 = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
+		$Allreviewed1 = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
 			JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_2.id
 			where feedback_reviews.groups_id = 2 and feedback_reviews.review = 1 and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");
 		$AllReviewsTotal1 = $RaisedReviewed1 = $NotRaisedReviewed1 = $RaisedDatename1 = array();
-		while($Totalreviewedfeedbacks1 = mysql_fetch_array($Allreviewed1))
+		while($Totalreviewedfeedbacks1 = mysqli_fetch_array($Allreviewed1))
 		{
 			$RaisedDatename1[] = date('d-m-y',strtotime($Totalreviewedfeedbacks1['date_time']));
 			$Totalreviewedfeedbacks1['total'];
 			$AllReviewsTotal1[] =  $Totalreviewedfeedbacks1['total'];
 		}
 		
-		$AllRaisedreviewsfeedbacks1 = mysql_query("SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
+		$AllRaisedreviewsfeedbacks1 = mysqli_query($_SESSION[$_SESSION['Prefix'].'connection'],"SELECT patients.`date_time`,count(*) as total FROM feedbacks_2 join patients on feedbacks_2.patient_id = patients.id 
 		JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_2.id
 		where feedback_reviews.review = 1 and feedback_reviews.groups_id = 2 and feedback_reviews.ticket_no != '' and patients.`date_time` >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) group by extract(day from patients.`date_time`)");							
 		$i = 0;
-		while($RaisedReviewedfeedbacks1 = mysql_fetch_array($AllRaisedreviewsfeedbacks1))
+		while($RaisedReviewedfeedbacks1 = mysqli_fetch_array($AllRaisedreviewsfeedbacks1))
 		{
 			$RaisedReviewedfeedbacks1['date_time'];
 			$RaisedReviewed1[] = $RaisedReviewedfeedbacks1['total'];

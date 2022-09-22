@@ -8,11 +8,11 @@
 	switch($_POST['Action'])
 	{
 		case "Options":
-			if(!$Exists = mysql_fetch_array(Select_Distributors_By_Name()))
+			if(!$Exists = mysqli_fetch_array(Select_Distributors_By_Name()))
 			{
 				Insert_Distributors();
 				echo "Inserted successfully$";
-				$Count_Distributors = mysql_fetch_array(Count_Distributors());
+				$Count_Distributors = mysqli_fetch_array(Count_Distributors());
 				echo $Count_Distributors['total']."$";
 				if(!$Count_Distributors['total'])
 					echo '<tr><td colspan="3"><font color="red"><center>No data found</center></font></td></tr>';
@@ -22,7 +22,7 @@
 					$_POST['CurrentPageNo'] = 1;
 				$i = $Start = ($_POST['CurrentPageNo']-1)*$Limit;
 				$Distributors = Select_Distributors($Start, $Limit);
-				while($Distributor = mysql_fetch_array($Distributors))
+				while($Distributor = mysqli_fetch_array($Distributors))
 					echo '<tr id="'.$Distributor['id'].'">
 						<td>'.++$i.'</td><td>'.$Distributor['name'].'</td><td><a href="#" onclick="Actions(\'Edit\', '.$Distributor['id'].');">Edit</a>&nbsp;<a href="#" onclick="Actions(\'Delete\', '.$Distributor['id'].');">Delete</a></td>
 					</tr>';
@@ -49,12 +49,12 @@
 				$_POST['ColumnsWithValues'] .= ", `patient_id` = '".$_POST['patient_id']."', `date_time` = '".$_POST['date_time']."'";
 				$_POST['ColumnsWithValues'] .= ", `group_id` = '".$_POST['group_id']."'";
 				$_POST['ColumnsWithValues'] = str_replace("`` = '',", "", $_POST['ColumnsWithValues']);
-				if($Patient_number = mysql_fetch_array(mysql_query("SELECT id FROM patients where patient_id = '".$_POST['patient_id']."'")))
+				if($Patient_number = mysqli_fetch_array(mysqli_query("SELECT id FROM patients where patient_id = '".$_POST['patient_id']."'")))
 					$_SESSION['patient_id'] = $Patient_number['id'];
 				else
 				{	
 					Insert_Patient();
-					$_SESSION['patient_id'] = mysql_insert_id();
+					$_SESSION['patient_id'] = mysqli_insert_id();
 				}	
 			}
 			else
@@ -64,23 +64,23 @@
 				Insert_Feedback();
 				
 				//Insert Comments
-				$FeedBack_Id = mysql_insert_id();
+				$FeedBack_Id = mysqli_insert_id();
 				$_POST['Comments'] = explode(".,", $_POST['Comments']);
 				foreach($_POST['Comments'] AS $Comment)
 				{
-					mysql_query("INSERT INTO feedbacks_comments VALUES('', '".$_POST['group_id']."', '".$FeedBack_Id."', $Comment)");
+					mysqli_query("INSERT INTO feedbacks_comments VALUES('', '".$_POST['group_id']."', '".$FeedBack_Id."', $Comment)");
 				}
 				
 				if($_POST['UserQsAndAnswers'])
 				{
 					$_POST['UserQsAndAnswers'] = explode("#$", $_POST['UserQsAndAnswers']);
 					foreach($_POST['UserQsAndAnswers'] AS $UserQsAndAnswers)
-						mysql_query("INSERT INTO feedbacks_comments VALUES('', '".$_POST['group_id']."', '".$FeedBack_Id."', $UserQsAndAnswers)");
+						mysqli_query("INSERT INTO feedbacks_comments VALUES('', '".$_POST['group_id']."', '".$FeedBack_Id."', $UserQsAndAnswers)");
 				}
 			}
 		break;
 		case "AjaxPagination":
-			$Count_Distributors = mysql_fetch_array(Count_Distributors());
+			$Count_Distributors = mysqli_fetch_array(Count_Distributors());
 			echo $Count_Distributors['total']."$";
 			if(!$Count_Distributors['total'])
 				echo '<tr><td colspan="3"><font color="red"><center>No data found</center></font></td></tr>';
@@ -90,7 +90,7 @@
 				$_POST['CurrentPageNo'] = 1;
 			$i = $Start = ($_POST['CurrentPageNo']-1)*$Limit;
 			$Distributors = Select_Distributors($Start, $Limit);
-			while($Distributor = mysql_fetch_array($Distributors))
+			while($Distributor = mysqli_fetch_array($Distributors))
 				echo '<tr id="'.$Distributor['id'].'">
 					<td>'.++$i.'</td><td>'.$Distributor['name'].'</td><td><a href="#" onclick="Actions(\'Edit\', '.$Distributor['id'].');">Edit</a>&nbsp;<a href="#" onclick="Actions(\'Delete\', '.$Distributor['id'].');">Delete</a></td>
 				</tr>';
@@ -98,7 +98,7 @@
 			include("../Ajax_Pagination.php");
 		break;
 		case "Update":
-			if(!$Exists = mysql_fetch_array(Select_Distributors_By_UpdateName()))
+			if(!$Exists = mysqli_fetch_array(Select_Distributors_By_UpdateName()))
 			{
 				if(Update_Distributors_By_Id())
 					echo "Updated successfully$$";

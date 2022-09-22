@@ -29,7 +29,7 @@
 			<option value="">Select</option>
 			<?php
 			$Groups = Select_Groups();
-			while($Group = mysql_fetch_array($Groups))
+			while($Group = mysqli_fetch_array($Groups))
 			{
 				if($Group['id'] == $_GET['group_id'])
 					echo '<option value="'.$Group['id'].'$'.$Group['prefix'].'"  selected>'.$Group['name'].'</option>';
@@ -52,7 +52,7 @@
 			$_SESSION[$_SESSION['Prefix'].'Module_Answer_Ids'][] = $_SESSION[$_SESSION['Prefix'].'Module_Answer_Ids'] = array();
 			$i = -1;
 			$iTemp = $jTemp = $kTemp = "";
-			while($Module = mysql_fetch_array($Modules))
+			while($Module = mysqli_fetch_array($Modules))
 			{
 				if($iTemp != $Module['Id'])
 				{
@@ -125,7 +125,7 @@
 						<thead><tr align="left">
 						<th></th>';
 						$Options = Select_Options_ByIds($_SESSION[$_SESSION['Prefix'].'Module_Answer_Ids'][$i][0]);
-						while($Option = mysql_fetch_array($Options))
+						while($Option = mysqli_fetch_array($Options))
 						{
 							/* if($Option['id'] == 1)
 								echo "<th></th>";

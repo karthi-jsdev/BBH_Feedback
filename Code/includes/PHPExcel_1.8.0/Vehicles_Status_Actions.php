@@ -8,7 +8,7 @@
 	switch($_POST['Action'])
 	{
 		case "AjaxPagination":
-			$Count_Device_Reports = mysql_fetch_array(Count_Device_Reports());
+			$Count_Device_Reports = mysqli_fetch_array(Count_Device_Reports());
 			echo $Count_Device_Reports['total']."$";
 			if(!$Count_Device_Reports['total'])
 				echo '<tr><td colspan="7"><font color="red"><center>No data found</center></font></td></tr>';
@@ -18,7 +18,7 @@
 				$_POST['CurrentPageNo'] = 1;
 			$i = $Start = ($_POST['CurrentPageNo']-1)*$Limit;
 			$Device_Reports = Select_Device_Reports($Start, $Limit);
-			while($Device_Report = mysql_fetch_array($Device_Reports))
+			while($Device_Report = mysqli_fetch_array($Device_Reports))
 			{
 				echo '<tr>
 					<td>'.++$i.'</td><td>'.$Device_Report['deviceName'].'('.$Device_Report['deviceId'].')</td><td>'.date('h:i:s a d/m/Y', strtotime($Device_Report['dateTime'])).'</td><td>'.$Device_Report['info'].'</td><td>'.$Device_Report['logType'].'</td><td>';
@@ -124,11 +124,11 @@
 			$ExportFileName = $_SESSION['Filter']['Module']." ".date("Y_m_d", strtotime($_POST['startdate']))."-".date("Y_m_d", strtotime($_POST['enddate'])).".xlsx";
 			$Device_Reports = Select_Device_Reports("", "");
 			$Header = array("Title" => $_SESSION['Filter']['Module']." Report ".date("d-M-Y", strtotime($_POST['startdate']))." : ".date("d-M-Y", strtotime($_POST['enddate'])),
-			"Description" => "Total ".$_SESSION['Filter']['Module']." Logs : ".mysql_num_rows($Device_Reports));
+			"Description" => "Total ".$_SESSION['Filter']['Module']." Logs : ".mysqli_num_rows($Device_Reports));
 			$TableHeader = Array('S.No.', 'Vehicle(Id)', 'Date Time', 'Information', 'Error Type', 'Pre Error Code', 'Error Code');
 			$TableData = Array();
 			$i = 0;
-			while($Device = mysql_fetch_array($Device_Reports))
+			while($Device = mysqli_fetch_array($Device_Reports))
 			{
 				$TableData[] = array('A'.(6+(++$i)) => $i,
 				'B'.(6+$i) => $Device['deviceName']." (".$Device['deviceId'].")",

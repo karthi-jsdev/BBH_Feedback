@@ -36,7 +36,7 @@
 							<option value="">Select</option>
 							<?php
 							$Groups = Select_Groups();
-							while($Group = mysql_fetch_array($Groups))
+							while($Group = mysqli_fetch_array($Groups))
 							{
 								if($Group['id'] == $_GET['group_id'] || $_POST['group_id'] == $Group['id'])
 									echo '<option value="'.$Group['id'].'" selected>'.$Group['name'].'</option>';
@@ -67,12 +67,12 @@ if(($_POST['report']) && ($_POST['group_id'] != ''))
 	include("includes/Config.php");
 	
 	//Surveycategoryname
-	$surveycategoryname = mysql_fetch_array(mysql_query("SELECT name from groups where id='".$_POST['group_id']."'"));
+	$surveycategoryname = mysqli_fetch_array(mysqli_query("SELECT name from groups where id='".$_POST['group_id']."'"));
 	
 	//Total Feedback
 	$monthname = $feedbackcountvalues = array();
-	$feedbacknumbers = mysql_query("SELECT extract(MONTH from `date_time`) as monthyear,COUNT(extract(YEAR_MONTH from `date_time`)) as countvalue  FROM feedbacks_".$_POST['group_id']." where extract(YEAR_MONTH from `date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from `date_time`)"); 
-	while($Numberoffeedback = mysql_fetch_array($feedbacknumbers))
+	$feedbacknumbers = mysqli_query("SELECT extract(MONTH from `date_time`) as monthyear,COUNT(extract(YEAR_MONTH from `date_time`)) as countvalue  FROM feedbacks_".$_POST['group_id']." where extract(YEAR_MONTH from `date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from `date_time`)"); 
+	while($Numberoffeedback = mysqli_fetch_array($feedbacknumbers))
 	{				
 		$monthname[] = date('F', mktime(0, 0, 0, $Numberoffeedback['monthyear'], 01));
 		$feedbackcountvalues[] = $Numberoffeedback['countvalue'];
@@ -80,22 +80,22 @@ if(($_POST['report']) && ($_POST['group_id'] != ''))
 
 
 	//Reviewed 
-	$Allfeedbacks = mysql_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
+	$Allfeedbacks = mysqli_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
 								where extract(YEAR_MONTH from patients.`date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from patients.`date_time`)");
 
 	$ReviewsTotal = $Reviewed = $NotReviewed = $Datename = array();
-	while($TotalAllfeedbacks = mysql_fetch_array($Allfeedbacks))
+	while($TotalAllfeedbacks = mysqli_fetch_array($Allfeedbacks))
 	{
 		$Datename[] = date('d-m-y',strtotime($TotalAllfeedbacks['monthyear']));
 		$TotalAllfeedbacks['total'];
 		$ReviewsTotal[] =  $TotalAllfeedbacks['total'];
 	}
 	
-	$AllReviewedfeedbacks = mysql_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
+	$AllReviewedfeedbacks = mysqli_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
 	JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_".$_POST['group_id'].".id
 	where feedback_reviews.groups_id = ".$_POST['group_id']."  and extract(YEAR_MONTH from patients.`date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from patients.`date_time`)");							
 	$i = 0;
-	while($Reviewedfeedbacks = mysql_fetch_array($AllReviewedfeedbacks))
+	while($Reviewedfeedbacks = mysqli_fetch_array($AllReviewedfeedbacks))
 	{
 		$Reviewedfeedbacks['monthyear'];
 		$Reviewed[] = $Reviewedfeedbacks['total'];
@@ -105,21 +105,21 @@ if(($_POST['report']) && ($_POST['group_id'] != ''))
 	
 	//Reviewed and Raised 
 	
-	$Allreviewed = mysql_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
+	$Allreviewed = mysqli_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
 		JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_".$_POST['group_id'].".id
 		where  feedback_reviews.groups_id = ".$_POST['group_id']." and feedback_reviews.review = 1 and extract(YEAR_MONTH from patients.`date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from patients.`date_time`)");
 	$AllReviewsTotal = $RaisedReviewed = $NotRaisedReviewed = $RaisedDatename = array();
-	while($Totalreviewedfeedbacks = mysql_fetch_array($Allreviewed))
+	while($Totalreviewedfeedbacks = mysqli_fetch_array($Allreviewed))
 	{
 		$RaisedDatename[] = date('d-m-y',strtotime($Totalreviewedfeedbacks['monthyear']));
 		$Totalreviewedfeedbacks['total'];
 		$AllReviewsTotal[] =  $Totalreviewedfeedbacks['total'];
 	}
-	$AllRaisedreviewsfeedbacks = mysql_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
+	$AllRaisedreviewsfeedbacks = mysqli_query("SELECT extract(YEAR_MONTH from patients.`date_time`) as monthyear,count(*) as total FROM feedbacks_".$_POST['group_id']." join patients on feedbacks_".$_POST['group_id'].".patient_id = patients.id 
 	JOIN feedback_reviews on feedback_reviews.feedbackid = feedbacks_".$_POST['group_id'].".id
 	where  feedback_reviews.groups_id = ".$_POST['group_id']."  and feedback_reviews.review = 1 and feedback_reviews.ticket_no != '' and extract(YEAR_MONTH from patients.`date_time`) = extract(YEAR_MONTH from '".date('y-m-d',strtotime($_POST['year']))."') group by extract(YEAR_MONTH from patients.`date_time`)");							
 	$i = 0;
-	while($RaisedReviewedfeedbacks = mysql_fetch_array($AllRaisedreviewsfeedbacks))
+	while($RaisedReviewedfeedbacks = mysqli_fetch_array($AllRaisedreviewsfeedbacks))
 	{
 		$RaisedReviewedfeedbacks['monthyear'];
 		$RaisedReviewed[] = $RaisedReviewedfeedbacks['total'];

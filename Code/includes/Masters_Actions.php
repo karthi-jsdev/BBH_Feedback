@@ -12,10 +12,10 @@
 				echo "Updation failed";
 		break;		
 		case "Select_Answer_Ids":	
-			$Answers =  mysql_fetch_array(mysql_query("SELECT option_ids FROM questions WHERE id='".$_GET['Question_Id']."'")); 
+			$Answers =  mysqli_fetch_array(mysqli_query("SELECT option_ids FROM questions WHERE id='".$_GET['Question_Id']."'")); 
 			$Answers['option_ids'] = explode(",", $Answers['option_ids']);
-			$AllAnswers =  mysql_query("SELECT * FROM answers"); 
-			while($Select_Option = mysql_fetch_array($AllAnswers))
+			$AllAnswers =  mysqli_query("SELECT * FROM answers"); 
+			while($Select_Option = mysqli_fetch_array($AllAnswers))
 			{
 				if(in_array($Select_Option['id'], $Answers['option_ids']))
 					echo "<input type='checkbox' id='".$Answers_Option['id']."' name='Option_Ids[]' value='".$Select_Option['id']."' checked>".$Select_Option['answer']."<br />";
@@ -24,11 +24,11 @@
 			}
 		break;
 		case "Update_Questions_Status":
-			$Update_Questions_Status = mysql_fetch_array(Update_Questions_Status());
+			$Update_Questions_Status = mysqli_fetch_array(Update_Questions_Status());
 			$CheckedCount = $UncheckedCount = $Count = 0;
 			$Parent_Id="";
 			$Parents_Status = Check_Parent_Status();
-			while($Parent_Status = mysql_fetch_assoc($Parents_Status))
+			while($Parent_Status = mysqli_fetch_assoc($Parents_Status))
 			{
 				$Count++;
 				$Parent_Id=$Parent_Status['ownerEl'];
@@ -40,18 +40,18 @@
 			echo $Parent_Id;
 			if($Count == $CheckedCount)
 			{
-				$Check_Parent = mysql_fetch_array(Check_Parent($Parent_Id));
+				$Check_Parent = mysqli_fetch_array(Check_Parent($Parent_Id));
 				echo "##1";
 				
 			}
 			elseif($Count == $UncheckedCount)
 			{
-				$Check_Parent = mysql_fetch_array(Check_Parent($Parent_Id));
+				$Check_Parent = mysqli_fetch_array(Check_Parent($Parent_Id));
 				echo "##0";
 			}
 		break;
 		case "Update_Questions_Status1":
-			$Update_Questions_Status = mysql_fetch_array(Update_Questions_Status());
+			$Update_Questions_Status = mysqli_fetch_array(Update_Questions_Status());
 			echo $Update_Questions_Status['Checked_Ids'];
 		break;	
 	}

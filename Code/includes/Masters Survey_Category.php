@@ -1,10 +1,10 @@
 <section role="main" id="main">
 	<?php
-		session_start();
+		//session_start();
 		$Columns = array("id", "name", "status","prefix");
 		if($_GET['action'] == 'Edit')
 		{
-			$Group = mysql_fetch_assoc(Group_Select_ById());
+			$Group = mysqli_fetch_assoc(Group_Select_ById());
 			foreach($Columns as $Col)
 				$_POST[$Col] = $Group[$Col];
 		}
@@ -19,7 +19,7 @@
 			$GroupResource = Group_Select_ByName();
 			if(isset($_POST['Submit']))
 			{
-				if(mysql_num_rows($GroupResource))
+				if(mysqli_num_rows($GroupResource))
 					$message = "<br /><div class='message error'><b>Message</b> : This Survey Category already exists</div>";
 				else
 				{
@@ -29,10 +29,10 @@
 			}
 			else if(isset($_POST['Update']))
 			{
-				$Group = mysql_fetch_assoc($GroupResource);
-				if(mysql_num_rows(Group_Select_ByNameId()))
+				$Group = mysqli_fetch_assoc($GroupResource);
+				if(mysqli_num_rows(Group_Select_ByNameId()))
 					$message = "<br /><div class='message error'><b>Message</b> : This Survey Category already exists</div>";
-				else if(mysql_num_rows(Group_Select_ByFeedbackId()))
+				else if(mysqli_num_rows(Group_Select_ByFeedbackId()))
 					$message = "<br /><div class='message error'><b>Message</b> : This Survey Category already exist in the feedback</div>"; 
 				else
 				{
@@ -86,7 +86,7 @@
 	<div class="columns">
 		<h3>Survey Category List
 			<?php
-			$GroupTotalRows = mysql_fetch_assoc(Group_Select_Count_All());
+			$GroupTotalRows = mysqli_fetch_assoc(Group_Select_Count_All());
 			echo " : No. of total Groups - ".$GroupTotalRows['total'];
 			?>
 		</h3>
@@ -118,7 +118,7 @@
 				$Departments = array("Disable", "Enable");
 				$Status = array("<a href='#' class='action-button' title='delete'><span class='delete'></span></a>", "<a href='#' class='action-button' title='accept'><span class='accept'></span></a>");
 				$Groups = Group_Select_ByLimit($Start, $Limit);
-				while($Group = mysql_fetch_assoc($Groups))
+				while($Group = mysqli_fetch_assoc($Groups))
 				{
 					echo "<tr>
 						<td align='center'>".$i--."</td>
