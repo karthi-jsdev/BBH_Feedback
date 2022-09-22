@@ -26,7 +26,6 @@
 	<?php
 	if($_GET['group_id'])
 	{ 
-		echo $_GET['group_id'];
 		?>
 		<section role="main" id="main">
 			<div class="columns" style='width:982px;height:700px;'>
